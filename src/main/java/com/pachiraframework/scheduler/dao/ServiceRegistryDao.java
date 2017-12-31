@@ -6,15 +6,15 @@ import org.springframework.stereotype.Repository;
 
 import com.pachiraframework.dao.BaseDao;
 import com.pachiraframework.dao.support.SqlQueryCommand;
-import com.pachiraframework.scheduler.entity.Job;
+import com.pachiraframework.scheduler.entity.ServiceRegistry;
 
 /**
  * @author kevin
  *
  */
 @Repository
-public class JobDao extends BaseDao {
-	public List<Job> getAll(){
+public class ServiceRegistryDao extends BaseDao {
+	public List<ServiceRegistry> getAll(){
 		SqlQueryCommand command = new SqlQueryCommand();
 		return this.findListBySqlCommand(command);
 //		List<Job> jobs = Lists.newArrayList();
@@ -25,4 +25,5 @@ public class JobDao extends BaseDao {
 //		job.setDescription("测试Job");
 //		return jobs;
 	}
+	
 }

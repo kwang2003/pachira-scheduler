@@ -3,11 +3,20 @@
         PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
-    <typeAliases>
-        <package name="sample.mybatis.domain"/>
-    </typeAliases>
+	<typeAliases>
+        <typeAlias alias="PageRequest" type="com.pachiraframework.domain.WrappedPageRequest"/>
+        <typeAlias alias="SqlQueryCommand" type="com.pachiraframework.dao.support.SqlQueryCommand"/>
+        <typeAlias alias="SqlUpdateCommand" type="com.pachiraframework.dao.support.SqlUpdateCommand"/>
+        <typeAlias alias="SqlDeleteCommand" type="com.pachiraframework.dao.support.SqlDeleteCommand"/>
+	
+		<typeAlias alias="Job" type="com.pachiraframework.scheduler.entity.Job"/>
+		<typeAlias alias="ServiceRegistry" type="com.pachiraframework.scheduler.entity.ServiceRegistry"/>
+	</typeAliases>
+	<typeHandlers>
+		<typeHandler handler="com.pachiraframework.dao.IdHandler" />
+	</typeHandlers>
     <mappers>
-        <mapper resource="sample/mybatis/mapper/CityMapper.xml"/>
-        <mapper resource="sample/mybatis/mapper/HotelMapper.xml"/>
+        <mapper resource="mappers/JobMapper.xml"/>
+        <mapper resource="mappers/ServiceRegistryMapper.xml"/>
     </mappers>
 </configuration>
