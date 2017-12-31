@@ -28,19 +28,18 @@ public abstract class AbstractJobRunner {
 				afterThrows(job, e);
 			}
 		}
-		log.warn("Job {} with cron {} can't run.",job.getName(),job.getCron());
 	}
 	protected abstract void runInternel(Job job);
 	protected void beforeRun(Job job) {
-		
+		log.debug("fefore run job {}",job.getId());
 	}
 	
 	protected void afterRun(Job job) {
-		
+		log.debug("after run job {}",job.getId());
 	}
 	
 	protected void afterThrows(Job job,Exception e) {
-		
+		log.debug("after throws run job {}",job.getId());
 	}
 	/**
 	 * 当前job在当前节点上是否具有运行资格
