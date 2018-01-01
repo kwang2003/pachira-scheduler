@@ -5,6 +5,7 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.google.common.base.Throwables;
+import com.pachiraframework.job.LeaderElector;
 import com.pachiraframework.scheduler.dao.JobHistoryDao;
 import com.pachiraframework.scheduler.entity.Job;
 import com.pachiraframework.scheduler.entity.JobHistory;
@@ -21,6 +22,8 @@ import lombok.extern.slf4j.Slf4j;
 public abstract class AbstractJobRunner {
 	@Autowired
 	private JobHistoryDao jobHistoryDao;
+	@Autowired
+	private LeaderElector leaderElector;
 	/**
 	 * 执行Job
 	 * @param job
@@ -71,6 +74,6 @@ public abstract class AbstractJobRunner {
 	 * @return
 	 */
 	protected boolean canRun(Job job) {
-		return true;
+		return this.leaderElector.isLeader();
 	}
 }

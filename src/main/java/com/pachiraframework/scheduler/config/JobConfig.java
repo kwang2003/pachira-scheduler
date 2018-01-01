@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -63,9 +64,10 @@ public class JobConfig implements SchedulingConfigurer {
     }
     
     private static class SimpleThreadFactory implements  ThreadFactory{
+    	private final AtomicInteger threadCount = new AtomicInteger(0);
 		@Override
 		public Thread newThread(Runnable r) {
-			return new Thread(r, "定时任务执行线程 ");
+			return new Thread(r, "定时任务执行线程 -"+threadCount.getAndIncrement());
 		}
     	
     }
