@@ -21,6 +21,9 @@ public class ServiceRegistry extends BaseEntity<String>{
 	private String type;
 	
 	public static enum TypeEnum{
+		/**
+		 * Dubbo的zookeeper注册中心
+		 */
 		DUBBO_ZOOKEEPER
 	}
 }

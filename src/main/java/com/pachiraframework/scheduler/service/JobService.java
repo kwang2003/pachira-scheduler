@@ -12,6 +12,11 @@ import com.pachiraframework.scheduler.entity.Job;
  *
  */
 public interface JobService {
+	/**
+	 * 任务信息查询
+	 * @param criteria
+	 * @return
+	 */
 	public Page<Job> search(SearchJobCriteria criteria);
 	/**
 	 * 添加一个新的job
@@ -19,6 +24,16 @@ public interface JobService {
 	 * @return
 	 */
 	public ExecuteResult<Job> add(AddJob job);
+	/**
+	 * 编辑任务信息
+	 * @param job
+	 * @return
+	 */
 	public ExecuteResult<Job> edit(EditJob job);
+	/**
+	 * 删除一个任务
+	 * @param jobId
+	 * @return
+	 */
 	public ExecuteResult<Job> delete(Long jobId);
 }

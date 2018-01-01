@@ -22,13 +22,13 @@ import lombok.SneakyThrows;
  */
 @Component
 public class HttpJobRunner extends AbstractJobRunner {
-
+	private static final String POST = "POST";
 	@Override
 	@SneakyThrows
 	public void runInternel(Job job) {
 		HttpRequest httpRequest = null;
 		String method = job.getMethod();
-		if("POST".equalsIgnoreCase(method)) {
+		if(POST.equalsIgnoreCase(method)) {
 			httpRequest = postRequest(job.getInterfaceName(), null);
 		}else {
 			httpRequest =  getRequest(job.getInterfaceName());

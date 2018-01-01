@@ -29,6 +29,10 @@ public abstract class AbstractJobRunner {
 			}
 		}
 	}
+	/**
+	 * 实际要执行的任务逻辑
+	 * @param job
+	 */
 	protected abstract void runInternel(Job job);
 	protected void beforeRun(Job job) {
 		log.debug("fefore run job {}",job.getId());

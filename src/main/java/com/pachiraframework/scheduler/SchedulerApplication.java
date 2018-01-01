@@ -6,6 +6,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
+/**
+ * @author wangxuzheng
+ *
+ */
 @EnableScheduling
 @SpringBootApplication
 public class SchedulerApplication extends WebMvcConfigurerAdapter{

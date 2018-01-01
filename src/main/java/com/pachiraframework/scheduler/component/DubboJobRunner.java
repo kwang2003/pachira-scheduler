@@ -4,13 +4,13 @@ import static com.google.common.base.Preconditions.checkArgument;
 
 import java.util.Map;
 
-import org.assertj.core.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.alibaba.dubbo.config.ReferenceConfig;
 import com.alibaba.dubbo.config.RegistryConfig;
 import com.alibaba.dubbo.rpc.service.GenericService;
+import com.google.common.base.Strings;
 import com.pachiraframework.scheduler.entity.Job;
 
 /**

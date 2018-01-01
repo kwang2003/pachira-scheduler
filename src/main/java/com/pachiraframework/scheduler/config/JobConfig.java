@@ -2,7 +2,8 @@ package com.pachiraframework.scheduler.config;
 
 import java.util.List;
 import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.ThreadFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -57,6 +58,15 @@ public class JobConfig implements SchedulingConfigurer {
 	
     @Bean(destroyMethod = "shutdown")
     public Executor taskExecutor() {
-        return Executors.newScheduledThreadPool(150);
+    	ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(100, new SimpleThreadFactory());
+        return executor;
+    }
+    
+    private static class SimpleThreadFactory implements  ThreadFactory{
+		@Override
+		public Thread newThread(Runnable r) {
+			return new Thread(r, "定时任务执行线程 ");
+		}
+    	
     }
 }
