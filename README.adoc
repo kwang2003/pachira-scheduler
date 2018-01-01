@@ -1,20 +1,14 @@
-create table job (id integer(20) not null primary key auto_increment,name varchar(64) not null,description varchar(128) ,cron varchar(64) not null,created_at datetime not null,updated_at datetime not null);
+== 项目信息
+* 基于spring boot
+* jdk1.8
+* 使用Swagger2作为rest 自动API文档自动生成
+* 使用Spring scheduler实现cron任务调度
+* 任务信息存储在数据库中，可以动态添加、删除、修改，可以手动触发任务执行
+* 使用zookeeper进行任务执行节点选择，保证同一个任务只在一个节点上运行
 
-alter table job add column type varchar(10) not null comment '任务类型，DBUUO,CONSUL,HTTP,EUREKA' after cron,add column registry varchar(64) comment '注册中心地址';
-
-update job set type = 'HTTP' where id = 1;
-
-create table service_registry(id varchar(20) not null primary key,name varchar(64) not null comment '注册中心名称', address varchar(256) not null comment '注册中心地址');
-
-alter table job add column interface_name varchar(256) not null comment '接口名称，http接口时为完整url',add column method varchar(100) not null comment '要执行的方法名',add column timeout integer(20) not null comment '执行超时时间，单位毫秒';
-
-update job set interface_name = 'http://www.baidu.com' ,method = 'GET' where id = 1;
-update job set timeout = 5000 where id = 1;
-
-
-alter table service_registry add column type varchar(20) not null comment '注册中心类型，DUBBO_ZOOKEEPER',add column created_at datetime not null, add column updated_at datetime not null;
-
-alter table service_registry modify column id varchar(50) not null;
-insert into service_registry (id,name,address,type,created_at,updated_at) values('DUBBO_ZOOKEEPER_LOCALHOST','本地环境zookeeper注册中心','zookeeper://localhost:2181','DUBBO_ZOOKEEPER',now(),now());
-
-alter table service_registry add column properties varchar(255) default '' after type;
+== 本地运行项目
+* 新建数据库scheduler，并将scheduler.sql脚本导入到数据库中
+* 本地运行一个zookeeper，占用2181端口（默认），如果没有安装，则到http://zookeeper.apache.org/ 下载一个
+* 修改项目配置项 application.properties，包括zookeeper的地址和端口，数据库的连接信息
+* 运行项目SchedulerApplication
+* 查看项目的API http://localhost:8080/swagger-ui.html
