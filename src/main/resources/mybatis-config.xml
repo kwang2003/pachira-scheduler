@@ -10,6 +10,7 @@
         <typeAlias alias="SqlDeleteCommand" type="com.pachiraframework.dao.support.SqlDeleteCommand"/>
 	
 		<typeAlias alias="Job" type="com.pachiraframework.scheduler.entity.Job"/>
+		<typeAlias alias="JobHistory" type="com.pachiraframework.scheduler.entity.JobHistory"/>
 		<typeAlias alias="ServiceRegistry" type="com.pachiraframework.scheduler.entity.ServiceRegistry"/>
 	</typeAliases>
 	<typeHandlers>
@@ -17,6 +18,7 @@
 	</typeHandlers>
     <mappers>
         <mapper resource="mappers/JobMapper.xml"/>
+        <mapper resource="mappers/JobHistoryMapper.xml"/>
         <mapper resource="mappers/ServiceRegistryMapper.xml"/>
     </mappers>
 </configuration>
