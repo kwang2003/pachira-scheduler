@@ -12,21 +12,25 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+/**
+ * @author wangxuzheng
+ *
+ */
 @EnableSwagger2
 @Configuration
 public class SwaggerConfig {
 	@Bean
-	public Docket createRestApi() {// 创建API基本信息
+	public Docket createRestApi() {
 		return new Docket(DocumentationType.SWAGGER_2).apiInfo(apiInfo()).select()
 				.apis(RequestHandlerSelectors.basePackage("com.pachiraframework.scheduler"))
 				.paths(PathSelectors.any()).build();
 	}
 
 	private ApiInfo apiInfo() {
-		return new ApiInfoBuilder().title("任务调度中心Rest Api")// API 标题
-				.description("任务调度管理、任务查询、任务执行历史记录查询")// API描述
-				.contact(new Contact("Kevin", "http://blog.csdn.net/crazycoder2010/", "wangxuzheng@aliyun.com"))// 联系人
-				.version("1.0")// 版本号
+		return new ApiInfoBuilder().title("任务调度中心Rest Api")
+				.description("任务调度管理、任务查询、任务执行历史记录查询")
+				.contact(new Contact("Kevin", "http://blog.csdn.net/crazycoder2010/", "wangxuzheng@aliyun.com"))
+				.version("1.0")
 				.build();
 	}
 }
