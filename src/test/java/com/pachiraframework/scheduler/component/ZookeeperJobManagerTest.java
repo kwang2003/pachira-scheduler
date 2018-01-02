@@ -2,17 +2,13 @@ package com.pachiraframework.scheduler.component;
 
 import java.util.concurrent.CountDownLatch;
 
-import org.apache.zookeeper.ZooKeeper;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.pachiraframework.scheduler.AbstractSchedulerApplicationTest;
-import com.pachiraframework.scheduler.component.zookeeper.JobInstanceCreatedHandler;
-import com.pachiraframework.scheduler.component.zookeeper.ZookeeperEventHandlers;
 import com.pachiraframework.scheduler.component.zookeeper.ZookeeperJobManager;
-import com.pachiraframework.scheduler.config.ZookeeperConfig;
 import com.pachiraframework.scheduler.entity.Job;
 
 /**
