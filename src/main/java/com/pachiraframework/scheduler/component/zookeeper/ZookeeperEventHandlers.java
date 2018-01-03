@@ -19,9 +19,7 @@ public class ZookeeperEventHandlers implements InitializingBean{
 	@Autowired
 	private JobNodeCreatedHandler jobNodeCreatedHandler;
 	@Autowired
-	private InstanceRemovedEventHandler instanceRemovedEventHandler;
-	@Autowired
-	private InstanceCreatedEventHandler instanceCreatedEventHandler;
+	private InstanceChangedEventHandler changedEventHandler;
 	
 	public void handle(WatchedEvent event) {
 		for(AbstractZookeeperEventHandler handler : this.handlers) {
@@ -31,7 +29,6 @@ public class ZookeeperEventHandlers implements InitializingBean{
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		this.handlers.add(this.jobNodeCreatedHandler);
-		this.handlers.add(this.instanceRemovedEventHandler);
-		this.handlers.add(this.instanceCreatedEventHandler);
+		this.handlers.add(this.changedEventHandler);
 	}
 }

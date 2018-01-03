@@ -34,7 +34,7 @@ public abstract class AbstractZookeeperEventHandler {
 	 */
 	@SneakyThrows
 	public void handle(WatchedEvent event) {
-		log.info("================path={},type={}",event.getPath(),event.getType());
+		log.info("================path={},type={}======================",event.getPath(),event.getType());
 		if(match(event)) {
 			String path = event.getPath();
 			EventType type = event.getType();
