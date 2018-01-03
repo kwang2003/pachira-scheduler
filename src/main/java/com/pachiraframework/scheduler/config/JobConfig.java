@@ -17,6 +17,7 @@ import org.springframework.scheduling.support.CronTrigger;
 import com.pachiraframework.scheduler.component.AbstractJobRunner;
 import com.pachiraframework.scheduler.component.JobRunnerContext;
 import com.pachiraframework.scheduler.component.JobRunnerFactory;
+import com.pachiraframework.scheduler.component.zookeeper.ZookeeperJobManager;
 import com.pachiraframework.scheduler.dao.JobDao;
 import com.pachiraframework.scheduler.entity.Job;
 
@@ -33,6 +34,8 @@ public class JobConfig implements SchedulingConfigurer {
 	private JobDao jobDao;
 	@Autowired
 	private JobRunnerFactory jobRunnerFactory;
+	@Autowired
+	private ZookeeperJobManager zookeeperJobManager;
 	@Override
 	public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {
         taskRegistrar.setScheduler(taskExecutor());
@@ -41,6 +44,7 @@ public class JobConfig implements SchedulingConfigurer {
         for(Job job : jobs) {
         	taskRegistrar.addCronTask(createCronTask(job));
         	log.info("Add job {} info task registrar",job);
+        	zookeeperJobManager.add(job);
         }
 	}
 	

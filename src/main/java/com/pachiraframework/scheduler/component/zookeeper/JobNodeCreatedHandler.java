@@ -28,7 +28,7 @@ public class JobNodeCreatedHandler extends AbstractZookeeperEventHandler {
 	@Override
 	protected void handleInternal(WatchedEvent event) throws KeeperException, InterruptedException {
 		String jobPath = event.getPath();
-		String jobId = jobPath.substring(jobPath.lastIndexOf("/"));
+		String jobId = jobPath.substring(jobPath.lastIndexOf("/")+1);
 		jobElector.electLeader(Long.valueOf(jobId));
 	}
 	

@@ -14,14 +14,14 @@ import org.springframework.stereotype.Component;
  *
  */
 @Component
-public class InstanceRemovedEventHandler extends AbstractZookeeperEventHandler {
+public class InstanceCreatedEventHandler extends AbstractZookeeperEventHandler {
 	@Autowired
 	private ZookeeperJobElector zookeeperJobElector;
 	@Override
 	protected boolean match(WatchedEvent event) {
 		String path = event.getPath();
 		EventType eventType = event.getType();
-		if(EventType.NodeDeleted.equals(eventType) && path.startsWith(ZookeeperJobConstants.JOB_INSTANCES_PATH+"/")) {
+		if(EventType.NodeCreated.equals(eventType) && path.startsWith(ZookeeperJobConstants.JOB_INSTANCES_PATH+"/")) {
 			return true;
 		}
 		return false;

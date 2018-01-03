@@ -3,10 +3,11 @@ package com.pachiraframework.scheduler.component.zookeeper;
 import java.util.List;
 
 import org.apache.zookeeper.WatchedEvent;
-import org.assertj.core.util.Lists;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import com.google.common.collect.Lists;
 
 /**
  * @author wangxuzheng
@@ -19,6 +20,8 @@ public class ZookeeperEventHandlers implements InitializingBean{
 	private JobNodeCreatedHandler jobNodeCreatedHandler;
 	@Autowired
 	private InstanceRemovedEventHandler instanceRemovedEventHandler;
+	@Autowired
+	private InstanceCreatedEventHandler instanceCreatedEventHandler;
 	
 	public void handle(WatchedEvent event) {
 		for(AbstractZookeeperEventHandler handler : this.handlers) {
@@ -29,5 +32,6 @@ public class ZookeeperEventHandlers implements InitializingBean{
 	public void afterPropertiesSet() throws Exception {
 		this.handlers.add(this.jobNodeCreatedHandler);
 		this.handlers.add(this.instanceRemovedEventHandler);
+		this.handlers.add(this.instanceCreatedEventHandler);
 	}
 }
