@@ -25,6 +25,16 @@ public class ZookeeperHelper {
 		create(path, CreateMode.PERSISTENT);
 	}
 	
+	/**
+	 * 删除zookeeper上的节点
+	 * @param path
+	 * @throws KeeperException 
+	 * @throws InterruptedException 
+	 */
+	public void delete(String path) throws InterruptedException, KeeperException {
+		zooKeeper.delete(path, -1);
+	}
+	
 	private void create(String givenPath,CreateMode createMode) throws KeeperException, InterruptedException {
 		String[] paths = givenPath.split("/");
 		int length = paths.length;

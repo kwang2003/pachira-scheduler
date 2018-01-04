@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import com.pachiraframework.common.ExecuteResult;
 import com.pachiraframework.domain.Page;
 import com.pachiraframework.domain.WrappedPageRequest;
+import com.pachiraframework.scheduler.component.zookeeper.ZookeeperJobManager;
 import com.pachiraframework.scheduler.dao.JobDao;
 import com.pachiraframework.scheduler.dto.AddJob;
 import com.pachiraframework.scheduler.dto.EditJob;
@@ -24,6 +25,8 @@ import lombok.extern.slf4j.Slf4j;
 public class JobServiceImpl implements JobService {
 	@Autowired
 	private JobDao jobDao;
+	@Autowired
+	private ZookeeperJobManager zookeeperJobManager;
 
 	@Override
 	public Page<Job> search(SearchJobCriteria criteria) {
@@ -39,6 +42,7 @@ public class JobServiceImpl implements JobService {
 		job.setCron(addJob.getCron());
 		jobDao.insert(job);
 		log.info("Added new Job ,id={},name={},cron={}",job.getId(),job.getName(),job.getCron());
+		zookeeperJobManager.add(job);
 		return null;
 	}
 

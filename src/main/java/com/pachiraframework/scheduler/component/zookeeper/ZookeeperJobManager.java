@@ -36,17 +36,23 @@ public class ZookeeperJobManager implements InitializingBean,DisposableBean{
 	@SneakyThrows
 	public void add(Job job) {
 		checkArgument(job.getId()!=null);
-		String jobNodePath = ZookeeperJobConstants.JOB_PATH+"/"+job.getId();
+		String jobNodePath = jobPath(job.getId());
 		zookeeperHelper.createPersistentNodeIfNotExist(jobNodePath);
 		jobElector.electLeader(job.getId());
+	}
+	
+	private String jobPath(Long jobId) {
+		return ZookeeperJobConstants.JOB_PATH+"/"+jobId;
 	}
 	
 	/**
 	 * 删除指定ID的job
 	 * @param id
 	 */
+	@SneakyThrows
 	public void delete(Long id) {
-		
+		String jobNodePath = jobPath(id);
+		zookeeperHelper.delete(jobNodePath);
 	}
 	
 	/**
