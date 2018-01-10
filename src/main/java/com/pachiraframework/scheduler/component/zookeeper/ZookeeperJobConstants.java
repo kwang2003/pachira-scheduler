@@ -7,5 +7,5 @@ package com.pachiraframework.scheduler.component.zookeeper;
 public class ZookeeperJobConstants {
 	public static final String JOB_PARENT_PATH = "/pachira/scheduler";
 	public static final String JOB_PATH = JOB_PARENT_PATH + "/jobs";
-	public static final String JOB_INSTANCES_PATH = JOB_PARENT_PATH + "/instances";
+	public static final String PATH_SPLITOR = "/";
 }

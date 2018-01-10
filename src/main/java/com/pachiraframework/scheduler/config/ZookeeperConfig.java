@@ -1,10 +1,10 @@
 package com.pachiraframework.scheduler.config;
 
-import java.io.IOException;
-
-import org.apache.zookeeper.WatchedEvent;
-import org.apache.zookeeper.Watcher;
-import org.apache.zookeeper.ZooKeeper;
+import org.apache.curator.framework.CuratorFramework;
+import org.apache.curator.framework.CuratorFrameworkFactory;
+import org.apache.curator.framework.recipes.cache.ChildData;
+import org.apache.curator.framework.recipes.cache.TreeCache;
+import org.apache.curator.retry.RetryForever;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -12,13 +12,16 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 
 import com.pachiraframework.scheduler.component.zookeeper.ZookeeperEventHandlers;
+import com.pachiraframework.scheduler.component.zookeeper.ZookeeperJobConstants;
 
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author wangxuzheng
  *
  */
+@Slf4j
 @Configuration
 public class ZookeeperConfig {
 	@Setter
@@ -27,14 +30,27 @@ public class ZookeeperConfig {
 	@Lazy
 	@Autowired
 	private ZookeeperEventHandlers zookeeperEventHandlers;
-	@Bean(destroyMethod="close")
-	public ZooKeeper zookeeper() throws IOException {
-		ZooKeeper zooKeeper = new ZooKeeper(this.zkConnectionString,5000,new Watcher() {
-			@Override
-			public void process(WatchedEvent event) {
+
+	@Bean(destroyMethod = "close")
+	public CuratorFramework curatorFramework() throws Exception {
+		CuratorFramework curator = CuratorFrameworkFactory.builder().connectString(zkConnectionString)
+				.sessionTimeoutMs(5000).retryPolicy(new RetryForever(2000)).build();
+		curator.start();
+		
+		return curator;
+	}
+	
+	@Bean(initMethod="start",destroyMethod="close")
+	public TreeCache watcher(@Autowired CuratorFramework curatorFramework) {
+		TreeCache watcher = new TreeCache(curatorFramework, ZookeeperJobConstants.JOB_PATH);
+		watcher.getListenable().addListener((client1, event) -> {
+			ChildData data = event.getData();
+			if (data == null) {
+				log.warn("No data in event[" + event + "]");
+			} else {
 				zookeeperEventHandlers.handle(event);
 			}
 		});
-		return zooKeeper;
+		return watcher;
 	}
 }

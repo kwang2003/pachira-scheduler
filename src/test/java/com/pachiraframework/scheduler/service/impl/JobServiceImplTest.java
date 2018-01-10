@@ -11,6 +11,7 @@ import com.pachiraframework.scheduler.AbstractSchedulerApplicationTest;
 import com.pachiraframework.scheduler.dto.AddJob;
 import com.pachiraframework.scheduler.dto.SearchJobCriteria;
 import com.pachiraframework.scheduler.entity.Job;
+import com.pachiraframework.scheduler.entity.Job.TypeEnum;
 import com.pachiraframework.scheduler.service.JobService;
 
 /**
@@ -24,10 +25,15 @@ public class JobServiceImplTest extends AbstractSchedulerApplicationTest{
 	@Test
 	public void testAdd(){
 		AddJob job = new AddJob();
-		job.setCron("0/5 * * * * *");
+		job.setCron("0/7 * * * * *");
 		job.setName("測試以下");
+		job.setType(TypeEnum.HTTP);
 		job.setDescription("5秒钟执行一次");
+		job.setMethod("GET");
+		job.setInterfaceName("http://www.baidu.com");
+		job.setTimeout(5000L);
 		jobService.add(job);
+		System.out.println("33333");
 	}
 	
 	@Test

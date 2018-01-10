@@ -1,17 +1,15 @@
 package com.pachiraframework.scheduler.component.zookeeper;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
-import org.apache.zookeeper.KeeperException;
-import org.apache.zookeeper.ZooKeeper;
+import org.apache.curator.framework.CuratorFramework;
 import org.apache.zookeeper.data.Stat;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,28 +20,25 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @Component
-public class ZookeeperJobElector implements InitializingBean{
+public class ZookeeperJobElector{
 	/**
 	 * job运行实例ID
 	 */
-//	private String instance = UUID.randomUUID().toString();
-	private String instance = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+	@Getter
+	private String instance = UUID.randomUUID().toString();
 	@Autowired
-	private ZookeeperHelper zookeeperHelper;
-	@Autowired
-	private ZooKeeper zooKeeper;
-	public void electLeader(Long jobId) throws KeeperException, InterruptedException {
-		String path = ZookeeperJobConstants.JOB_INSTANCES_PATH;
-		List<String> children = zooKeeper.getChildren(path, true);
+	private CuratorFramework curatorFramework;
+	public void electLeader(Long jobId) throws Exception {
+		String path = ZookeeperJobConstants.JOB_PATH+ZookeeperJobConstants.PATH_SPLITOR+jobId;
+		List<String> children = curatorFramework.getChildren().forPath(path);
 		int length = children.size();
 		int index = new Random().nextInt(length);
 		String randomLeader = children.get(index);
-		String jobNodePath = ZookeeperJobConstants.JOB_PATH+"/"+jobId;
-		zooKeeper.setData(jobNodePath, nodeData(randomLeader), -1);
+		curatorFramework.setData().forPath(path, nodeData(randomLeader));
 		
 		//确保选举出来的leader是合法的
 		String leaderPath = path + "/"+randomLeader;
-		Stat stat = zooKeeper.exists(leaderPath, true);
+		Stat stat = curatorFramework.checkExists().forPath(leaderPath);
 		if(stat == null) {
 			electLeader(jobId);
 		}
@@ -55,7 +50,7 @@ public class ZookeeperJobElector implements InitializingBean{
 	@SneakyThrows
 	public String getJobLeader(Long jobId) {
 		String path = ZookeeperJobConstants.JOB_PATH+"/"+jobId;
-		byte[] data = zooKeeper.getData(path, true, new Stat());
+		byte[] data = curatorFramework.getData().forPath(path);
 		return new String(data);
 	}
 	
@@ -67,9 +62,5 @@ public class ZookeeperJobElector implements InitializingBean{
 	public boolean isLeader(Long jobId) {
 		String leader = this.getJobLeader(jobId);
 		return this.instance.equals(leader);
-	}
-	@Override
-	public void afterPropertiesSet() throws Exception {
-		zookeeperHelper.createEphemeralNodeIfNotExist(ZookeeperJobConstants.JOB_INSTANCES_PATH+"/"+this.instance);
 	}
 }

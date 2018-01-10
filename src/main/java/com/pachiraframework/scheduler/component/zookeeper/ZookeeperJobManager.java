@@ -2,10 +2,8 @@ package com.pachiraframework.scheduler.component.zookeeper;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
-import org.apache.zookeeper.KeeperException;
-import org.apache.zookeeper.ZooKeeper;
-import org.springframework.beans.factory.DisposableBean;
-import org.springframework.beans.factory.InitializingBean;
+import org.apache.curator.framework.CuratorFramework;
+import org.apache.zookeeper.CreateMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -13,22 +11,27 @@ import com.pachiraframework.scheduler.dto.EditJob;
 import com.pachiraframework.scheduler.entity.Job;
 
 import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * 基于zookeeper实现的任务选举执行
+ * <pre>
+ * |--jobs
+ *      |--1
+ *         |--instance1(临时节点)
+ *         |--instance2(临时节点)
+ *      |--2
+ *         |--instance1(临时节点)
+ *         |--instance2(临时节点)
+ * </pre>
  * @author wangxuzheng
  *
  */
-@Slf4j
 @Component
-public class ZookeeperJobManager implements InitializingBean,DisposableBean{
-	@Autowired
-	private ZooKeeper zooKeeper;
+public class ZookeeperJobManager{
 	@Autowired
 	private ZookeeperJobElector jobElector;
 	@Autowired
-	private ZookeeperHelper zookeeperHelper;
+	private CuratorFramework curatorFramework;
 	/**
 	 * 添加一个job
 	 * @param job
@@ -37,12 +40,12 @@ public class ZookeeperJobManager implements InitializingBean,DisposableBean{
 	public void add(Job job) {
 		checkArgument(job.getId()!=null);
 		String jobNodePath = jobPath(job.getId());
-		zookeeperHelper.createPersistentNodeIfNotExist(jobNodePath);
+		curatorFramework.create().creatingParentsIfNeeded().withMode(CreateMode.EPHEMERAL).forPath(jobNodePath + ZookeeperJobConstants.PATH_SPLITOR + jobElector.getInstance());
 		jobElector.electLeader(job.getId());
 	}
 	
 	private String jobPath(Long jobId) {
-		return ZookeeperJobConstants.JOB_PATH+"/"+jobId;
+		return ZookeeperJobConstants.JOB_PATH + ZookeeperJobConstants.PATH_SPLITOR + jobId;
 	}
 	
 	/**
@@ -52,7 +55,7 @@ public class ZookeeperJobManager implements InitializingBean,DisposableBean{
 	@SneakyThrows
 	public void delete(Long id) {
 		String jobNodePath = jobPath(id);
-		zookeeperHelper.delete(jobNodePath);
+		curatorFramework.delete().forPath(jobNodePath);
 	}
 	
 	/**
@@ -71,21 +74,4 @@ public class ZookeeperJobManager implements InitializingBean,DisposableBean{
 		
 	}
 	
-	private void initZookeeperNodes() throws KeeperException, InterruptedException {
-		zookeeperHelper.createPersistentNodeIfNotExist(ZookeeperJobConstants.JOB_PARENT_PATH);
-		//创建instances节点
-		zookeeperHelper.createPersistentNodeIfNotExist(ZookeeperJobConstants.JOB_INSTANCES_PATH);
-	}
-	
-
-	@Override
-	public void afterPropertiesSet() throws Exception {
-		initZookeeperNodes();
-	}
-
-	@Override
-	public void destroy() throws Exception {
-		this.zooKeeper.close();
-		log.info("zookeeper客户端注销成功");
-	}
 }

@@ -10,7 +10,7 @@ Target Server Type    : MariaDB
 Target Server Version : 100113
 File Encoding         : 65001
 
-Date: 2018-01-01 16:50:40
+Date: 2018-01-10 19:38:45
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -32,12 +32,15 @@ CREATE TABLE `job` (
   `method` varchar(100) NOT NULL COMMENT '要执行的方法名',
   `timeout` int(20) NOT NULL COMMENT '执行超时时间，单位毫秒',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of job
 -- ----------------------------
-INSERT INTO `job` VALUES ('1', '测试任务', '测试一下', '0/5 * * * * ?', 'HTTP', '2018-01-01 11:17:15', '2018-01-01 11:17:18', 'DUBBO_ZOOKEEPER_LOCALHOST', 'http://www.baidu.com', 'GET', '5000');
+INSERT INTO `job` VALUES ('1', '测试任务', '测试一下', '0/1 * * * * ?', 'HTTP', '2018-01-01 11:17:15', '2018-01-01 11:17:18', 'DUBBO_ZOOKEEPER_LOCALHOST', 'http://www.baidu.com', 'GET', '5000');
+INSERT INTO `job` VALUES ('16', '測試以下', '5秒钟执行一次', '0/7 * * * * *', 'HTTP', '2018-01-09 18:43:41', '2018-01-09 18:43:41', null, 'http://www.baidu.com', 'GET', '5000');
+INSERT INTO `job` VALUES ('17', '測試以下', '5秒钟执行一次', '0/7 * * * * *', 'HTTP', '2018-01-09 18:45:25', '2018-01-09 18:45:25', null, 'http://www.baidu.com', 'GET', '5000');
+INSERT INTO `job` VALUES ('18', '測試以下', '5秒钟执行一次', '0/7 * * * * *', 'HTTP', '2018-01-10 19:37:21', '2018-01-10 19:37:21', null, 'http://www.baidu.com', 'GET', '5000');
 
 -- ----------------------------
 -- Table structure for job_history
@@ -55,7 +58,7 @@ CREATE TABLE `job_history` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=112 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=89894 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of job_history

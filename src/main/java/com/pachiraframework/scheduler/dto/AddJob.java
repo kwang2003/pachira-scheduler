@@ -21,4 +21,17 @@ public class AddJob {
 	 * 注册中心地址
 	 */
 	private String registry;
+	/**
+	 * 要执行的接口名称
+	 */
+	private String interfaceName;
+	/**
+	 * 要执行的方法名
+	 */
+	private String method;
+
+	/**
+	 * 超时时间，单位毫秒
+	 */
+	private Long timeout;
 }

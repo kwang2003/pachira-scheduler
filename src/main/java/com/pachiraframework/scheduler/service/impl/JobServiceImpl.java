@@ -40,10 +40,14 @@ public class JobServiceImpl implements JobService {
 		job.setName(addJob.getName());
 		job.setDescription(addJob.getDescription());
 		job.setCron(addJob.getCron());
+		job.setInterfaceName(addJob.getInterfaceName());
+		job.setMethod(addJob.getMethod());
+		job.setTimeout(addJob.getTimeout());
+		job.setType(addJob.getType().toString());
 		jobDao.insert(job);
 		log.info("Added new Job ,id={},name={},cron={}",job.getId(),job.getName(),job.getCron());
 		zookeeperJobManager.add(job);
-		return null;
+		return ExecuteResult.newSuccessResult(job);
 	}
 
 	@Override
