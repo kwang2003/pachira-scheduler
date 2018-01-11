@@ -27,7 +27,6 @@ public abstract class AbstractZookeeperEventHandler {
 	 */
 	@SneakyThrows
 	public void handle(TreeCacheEvent event) {
-		log.info("================path={},type={}======================",event.getData(),event.getType());
 		if(match(event)) {
 			String path = event.getData().getPath();
 			Type type = event.getType();

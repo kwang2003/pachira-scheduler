@@ -31,6 +31,10 @@ public class ZookeeperJobElector{
 	public void electLeader(Long jobId) throws Exception {
 		String path = ZookeeperJobConstants.JOB_PATH+ZookeeperJobConstants.PATH_SPLITOR+jobId;
 		List<String> children = curatorFramework.getChildren().forPath(path);
+		if(children.isEmpty()) {
+			log.warn("job id={},没有子节点信息",jobId);
+			return;
+		}
 		int length = children.size();
 		int index = new Random().nextInt(length);
 		String randomLeader = children.get(index);
