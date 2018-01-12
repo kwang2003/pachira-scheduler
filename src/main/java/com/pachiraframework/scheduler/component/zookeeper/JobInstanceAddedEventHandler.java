@@ -58,7 +58,7 @@ public class JobInstanceAddedEventHandler extends AbstractZookeeperEventHandler 
 			return;
 		}
 		jobScheduler.addJob(job);
-		log.warn("找到job id={}的任务信息，加入到任务调度器中（如果没有在调度器中）",jobId);
+		log.info("找到job id={}的任务信息，加入到任务调度器中（如果没有在调度器中）",jobId);
 	}
 	private String jobPath(Long jobId) {
 		return ZookeeperJobConstants.JOB_PATH + ZookeeperJobConstants.PATH_SPLITOR + jobId;
