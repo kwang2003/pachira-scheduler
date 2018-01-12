@@ -36,7 +36,13 @@ public class ZookeeperJobElector{
 			log.warn("[{}] 不存在，无法选举",path);
 			return;
 		}
-		List<String> children = curatorFramework.getChildren().forPath(path);
+		List<String> children = null;
+		try {
+			children = curatorFramework.getChildren().forPath(path);
+		} catch (NoNodeException e) {
+			log.warn("节点[{}]已经被删除，job [{}] 的leader被设置为null",path,jobId);
+			return;
+		}
 		if(children.isEmpty()) {
 			log.warn("job id={},没有子节点信息",jobId);
 			return;
