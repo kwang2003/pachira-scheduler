@@ -5,7 +5,7 @@ import org.apache.curator.framework.recipes.cache.TreeCacheEvent.Type;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.pachiraframework.scheduler.config.JobScheduler;
+import com.pachiraframework.scheduler.component.JobScheduler;
 
 /**
  * @author wangxuzheng
@@ -31,7 +31,7 @@ public class JobNodeRemovedEventHandler extends AbstractZookeeperEventHandler {
 		String path = event.getData().getPath();
 		String jobId = path.substring(ZookeeperJobConstants.JOB_PATH.length() + 1);
 		Long id = Long.valueOf(jobId);
-		jobScheduler.removeTask(id);
+		jobScheduler.removeJob(id);
 	}
 
 }

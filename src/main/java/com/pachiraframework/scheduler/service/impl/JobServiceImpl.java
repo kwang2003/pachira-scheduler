@@ -1,5 +1,6 @@
 package com.pachiraframework.scheduler.service.impl;
 
+import org.quartz.CronExpression;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,6 +38,11 @@ public class JobServiceImpl implements JobService {
 
 	@Override
 	public ExecuteResult<Job> add(AddJob addJob) {
+		try {
+			new CronExpression(addJob.getCron());
+		}catch(Exception e) {
+			return ExecuteResult.newErrorResult("非法的cron表达式");
+		}
 		Job job = new Job();
 		job.setName(addJob.getName());
 		job.setDescription(addJob.getDescription());

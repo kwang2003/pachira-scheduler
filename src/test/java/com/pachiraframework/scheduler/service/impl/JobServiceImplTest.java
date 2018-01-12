@@ -27,7 +27,7 @@ public class JobServiceImplTest extends AbstractSchedulerApplicationTest{
 	@Test
 	public void testAdd(){
 		AddJob job = new AddJob();
-		job.setCron("0/7 * * * * *");
+		job.setCron("0/5 * * * * ?");
 		job.setName("測試以下");
 		job.setType(TypeEnum.HTTP);
 		job.setDescription("5秒钟执行一次");

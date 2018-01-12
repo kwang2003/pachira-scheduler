@@ -1,6 +1,7 @@
 package com.pachiraframework.scheduler.config;
 
-import org.quartz.SchedulerFactory;
+import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
 import org.quartz.impl.StdSchedulerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,8 +13,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class QuartzConfig {
 	@Bean
-	public SchedulerFactory schedulerFactory() {
-		StdSchedulerFactory schedulerFactory = new StdSchedulerFactory(); 
-		return schedulerFactory;
+	public Scheduler scheduler() throws SchedulerException {
+		Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
+		return scheduler;
 	}
 }

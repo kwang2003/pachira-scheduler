@@ -8,7 +8,7 @@ import org.apache.zookeeper.data.Stat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.pachiraframework.scheduler.config.JobScheduler;
+import com.pachiraframework.scheduler.component.JobScheduler;
 import com.pachiraframework.scheduler.dao.JobDao;
 import com.pachiraframework.scheduler.entity.Job;
 
@@ -57,7 +57,7 @@ public class JobInstanceAddedEventHandler extends AbstractZookeeperEventHandler 
 			log.warn("找不到job id={}的任务信息，无法加入到调度器中",jobId);
 			return;
 		}
-		jobScheduler.addNewTask(job);
+		jobScheduler.addJob(job);
 		log.warn("找到job id={}的任务信息，加入到任务调度器中（如果没有在调度器中）",jobId);
 	}
 	private String jobPath(Long jobId) {

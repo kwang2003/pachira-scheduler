@@ -5,6 +5,7 @@ import java.util.Random;
 import java.util.UUID;
 
 import org.apache.curator.framework.CuratorFramework;
+import org.apache.zookeeper.KeeperException.NoNodeException;
 import org.apache.zookeeper.data.Stat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -64,8 +65,13 @@ public class ZookeeperJobElector{
 			log.warn("[{}] 不存在，无法选举",path);
 			return null;
 		}
-		byte[] data = curatorFramework.getData().forPath(path);
-		return new String(data);
+		try {
+			byte[] data = curatorFramework.getData().forPath(path);
+			return new String(data);
+		}catch(NoNodeException e) {
+			log.warn("节点[{}]已经被删除，job [{}] 的leader被设置为null",path,jobId);
+			return null;
+		}
 	}
 	
 	/**
