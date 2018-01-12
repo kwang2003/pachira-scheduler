@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import com.pachiraframework.common.ExecuteResult;
 import com.pachiraframework.domain.Page;
 import com.pachiraframework.domain.WrappedPageRequest;
+import com.pachiraframework.entity.BaseEntity.IsDeletedEnum;
 import com.pachiraframework.scheduler.component.zookeeper.ZookeeperJobManager;
 import com.pachiraframework.scheduler.dao.JobDao;
 import com.pachiraframework.scheduler.dto.AddJob;
@@ -44,6 +45,7 @@ public class JobServiceImpl implements JobService {
 		job.setMethod(addJob.getMethod());
 		job.setTimeout(addJob.getTimeout());
 		job.setType(addJob.getType().toString());
+		job.setIsDeleted(IsDeletedEnum.NOT_DELTED.getIsDeleted());
 		jobDao.insert(job);
 		log.info("Added new Job ,id={},name={},cron={}",job.getId(),job.getName(),job.getCron());
 		zookeeperJobManager.add(job);
@@ -52,14 +54,16 @@ public class JobServiceImpl implements JobService {
 
 	@Override
 	public ExecuteResult<Job> edit(EditJob job) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public ExecuteResult<Job> delete(Long jobId) {
-		// TODO Auto-generated method stub
-		return null;
+		Job job = jobDao.getById(jobId);
+		jobDao.delete(jobId);
+		zookeeperJobManager.delete(jobId);
+		log.info("删除job id={}",jobId);
+		return ExecuteResult.newSuccessResult(job);
 	}
 
 }

@@ -1,6 +1,7 @@
 package com.pachiraframework.scheduler.config;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -12,8 +13,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.scheduling.config.ContextLifecycleScheduledTaskRegistrar;
 import org.springframework.scheduling.config.CronTask;
+import org.springframework.scheduling.config.ScheduledTask;
 import org.springframework.stereotype.Component;
 
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.pachiraframework.scheduler.component.AbstractJobRunner;
 import com.pachiraframework.scheduler.component.JobRunnerContext;
@@ -23,13 +26,17 @@ import com.pachiraframework.scheduler.component.zookeeper.ZookeeperJobManager;
 import com.pachiraframework.scheduler.dao.JobDao;
 import com.pachiraframework.scheduler.entity.Job;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * @author wangxuzheng
  *
  */
+@Slf4j
 @Component
 @Configuration
 public class JobScheduler implements InitializingBean {
+	private Map<String, ScheduledTask> taskMap = Maps.newConcurrentMap();
 	@Autowired
 	private JobRunnerFactory jobRunnerFactory;
 	@Autowired
@@ -65,6 +72,7 @@ public class JobScheduler implements InitializingBean {
 	 */
 	public boolean addNewTask(Job job) {
 		List<CronTask> list = contextLifecycleScheduledTaskRegistrar.getCronTaskList();
+//		Predicate<CronTask> predicate = task -> ((KeyedCronTask)task).getKey().equals(String.valueOf(job.getId()));
 		boolean exist = false;
 		for (CronTask cronTask : list) {
 			KeyedCronTask task = (KeyedCronTask) cronTask;
@@ -76,10 +84,27 @@ public class JobScheduler implements InitializingBean {
 		}
 		if (!exist) {
 			// this.contextLifecycleScheduledTaskRegistrar.addCronTask(createCronTask(job));
-			this.contextLifecycleScheduledTaskRegistrar.scheduleCronTask(createCronTask(job));
+			ScheduledTask scheduledTask = this.contextLifecycleScheduledTaskRegistrar.scheduleCronTask(createCronTask(job));
+			taskMap.put(String.valueOf(job.getId()), scheduledTask);
+			log.info("added task {} to scheduler.",job.getId());
 		}
 
 		return !exist;
+	}
+	
+	/**
+	 * 从调度器中删除job
+	 * @param jobId
+	 * @return
+	 */
+	public void removeTask(Long jobId) {
+		String key = String.valueOf(jobId);
+		ScheduledTask scheduledTask = taskMap.get(key);
+		if(scheduledTask != null) {
+			scheduledTask.cancel();
+			taskMap.remove(key);
+			log.info("removed task {} from scheduler.",jobId);
+		}
 	}
 
 	@Bean

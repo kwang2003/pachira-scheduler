@@ -55,7 +55,7 @@ public class ZookeeperJobManager{
 	@SneakyThrows
 	public void delete(Long id) {
 		String jobNodePath = jobPath(id);
-		curatorFramework.delete().forPath(jobNodePath);
+		curatorFramework.delete().deletingChildrenIfNeeded().forPath(jobNodePath);
 	}
 	
 	/**

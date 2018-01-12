@@ -20,6 +20,8 @@ public class ZookeeperEventHandlers implements InitializingBean{
 	private JobInstanceRemovedEventHandler jobInstanceRemovedEventHandler;
 	@Autowired
 	private JobInstanceAddedEventHandler jobInstanceAddedEventHandler;
+	@Autowired
+	private JobNodeRemovedEventHandler jobNodeRemovedEventHandler;
 	public void handle(TreeCacheEvent event) {
 		for(AbstractZookeeperEventHandler handler : this.handlers) {
 			handler.handle(event);
@@ -29,5 +31,6 @@ public class ZookeeperEventHandlers implements InitializingBean{
 	public void afterPropertiesSet() throws Exception {
 		this.handlers.add(this.jobInstanceRemovedEventHandler);
 		this.handlers.add(this.jobInstanceAddedEventHandler);
+		this.handlers.add(this.jobNodeRemovedEventHandler);
 	}
 }

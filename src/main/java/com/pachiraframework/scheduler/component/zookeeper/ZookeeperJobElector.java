@@ -30,6 +30,11 @@ public class ZookeeperJobElector{
 	private CuratorFramework curatorFramework;
 	public void electLeader(Long jobId) throws Exception {
 		String path = ZookeeperJobConstants.JOB_PATH+ZookeeperJobConstants.PATH_SPLITOR+jobId;
+		Stat pathStat = curatorFramework.checkExists().forPath(path);
+		if(pathStat == null) {
+			log.warn("[{}] 不存在，无法选举",path);
+			return;
+		}
 		List<String> children = curatorFramework.getChildren().forPath(path);
 		if(children.isEmpty()) {
 			log.warn("job id={},没有子节点信息",jobId);
@@ -54,6 +59,11 @@ public class ZookeeperJobElector{
 	@SneakyThrows
 	public String getJobLeader(Long jobId) {
 		String path = ZookeeperJobConstants.JOB_PATH+"/"+jobId;
+		Stat pathStat = curatorFramework.checkExists().forPath(path);
+		if(pathStat == null) {
+			log.warn("[{}] 不存在，无法选举",path);
+			return null;
+		}
 		byte[] data = curatorFramework.getData().forPath(path);
 		return new String(data);
 	}

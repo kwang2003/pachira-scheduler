@@ -1,11 +1,13 @@
 package com.pachiraframework.scheduler.service.impl;
 
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.pachiraframework.common.ExecuteResult;
 import com.pachiraframework.domain.Page;
 import com.pachiraframework.scheduler.AbstractSchedulerApplicationTest;
 import com.pachiraframework.scheduler.dto.AddJob;
@@ -32,7 +34,10 @@ public class JobServiceImplTest extends AbstractSchedulerApplicationTest{
 		job.setMethod("GET");
 		job.setInterfaceName("http://www.baidu.com");
 		job.setTimeout(5000L);
-		jobService.add(job);
+		ExecuteResult<Job> result = jobService.add(job);
+		Job newJob = result.getResult();
+		assertThat(newJob.getId(), notNullValue());
+		jobService.delete(newJob.getId());
 		System.out.println("33333");
 	}
 	

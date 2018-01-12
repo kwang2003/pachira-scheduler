@@ -11,12 +11,13 @@
 		<result property="interfaceName" column="interface_name"/>
 		<result property="method" column="method"/>
 		<result property="timeout" column="timeout"/>
+		<result property="isDeleted" column="is_deleted"/>
 		<result property="createdAt" column="created_at" />
 		<result property="updatedAt" column="updated_at" />
 	</resultMap>
 	<sql id="table">job</sql>
 	<sql id="columns">
-		name,description,cron,type,registry,interface_name,method,timeout,created_at,updated_at</sql>
+		name,description,cron,type,registry,interface_name,method,timeout,is_deleted,created_at,updated_at</sql>
 	<sql id="limit"> limit #{pageRequest.offset},#{pageRequest.size} 	</sql>
 	<sql id="orderBy">
 		<if test="pageRequest.orders.size() > 0">
@@ -39,6 +40,7 @@
 		select id,<include refid="columns"/> 
 		from <include refid="table"/>
 		where 1=1
+		and is_deleted=0
         <foreach item="k" index="key" collection="where" >
            ${k.andOr} ${k.column} ${k.operator} #{k.value}  
         </foreach>
@@ -69,6 +71,7 @@
 		from
 		<include refid="table" />
 		where 1=1
+		and is_deleted=0
 		<include refid="findByPageCriteria" />
 		<include refid="orderBy" />
 		<include refid="limit" />
@@ -78,6 +81,7 @@
 		select count(*) from
 		<include refid="table" />
 		where 1=1
+		and is_deleted=0
 		<include refid="findByPageCriteria" />
 	</select>
 	<insert id="insert" parameterType="Job" useGeneratedKeys="true" keyProperty="id">
@@ -91,6 +95,7 @@
 			#{interfaceName},
 			#{method},
 			#{timeout},
+			#{isDeleted},
 			now(),
 			now()	)
 	</insert>
