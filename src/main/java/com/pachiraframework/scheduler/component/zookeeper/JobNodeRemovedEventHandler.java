@@ -34,7 +34,7 @@ public class JobNodeRemovedEventHandler extends AbstractZookeeperEventHandler {
 		String path = event.getData().getPath();
 		String jobId = path.substring(ZookeeperJobConstants.JOB_PATH.length() + 1);
 		Long id = Long.valueOf(jobId);
-		log.info("job [{}] 节点被移除");
+		log.info("job [{}] 节点被移除",jobId);
 		jobScheduler.removeJob(id);
 	}
 

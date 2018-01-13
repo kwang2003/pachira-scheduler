@@ -33,7 +33,7 @@ public class JobInstanceRemovedEventHandler extends AbstractZookeeperEventHandle
 		String path = event.getData().getPath();
 		String jobId = path.substring(ZookeeperJobConstants.JOB_PATH.length() + 1, path.lastIndexOf(ZookeeperJobConstants.PATH_SPLITOR));
 		Long id = Long.valueOf(jobId);
-		log.info("instance[{}] 被移除，从job [{}]节点下将其移除");
+		log.info("instance[{}] 被移除，从job [{}]节点下将其移除",path,jobId);
 		zookeeperJobElector.electLeader(id);
 	}
 
