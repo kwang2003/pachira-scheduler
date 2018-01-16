@@ -14,7 +14,6 @@ import org.springframework.context.annotation.Lazy;
 import com.pachiraframework.scheduler.component.zookeeper.ZookeeperEventHandlers;
 import com.pachiraframework.scheduler.component.zookeeper.ZookeeperJobConstants;
 
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -24,7 +23,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Configuration
 public class ZookeeperConfig {
-	@Setter
 	@Value("${zookeeper.address}")
 	private String zkConnectionString;
 	@Lazy
