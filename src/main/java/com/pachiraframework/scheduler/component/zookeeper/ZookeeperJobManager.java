@@ -7,7 +7,6 @@ import org.apache.zookeeper.CreateMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.pachiraframework.scheduler.dto.EditJob;
 import com.pachiraframework.scheduler.entity.Job;
 
 import lombok.SneakyThrows;
@@ -57,21 +56,4 @@ public class ZookeeperJobManager{
 		String jobNodePath = jobPath(id);
 		curatorFramework.delete().deletingChildrenIfNeeded().forPath(jobNodePath);
 	}
-	
-	/**
-	 * 暂停运行job
-	 * @param id
-	 */
-	public void pause(Long id) {
-		
-	}
-	
-	/**
-	 * 编辑新的任务属性
-	 * @param newJob
-	 */
-	public void edit(EditJob newJob) {
-		
-	}
-	
 }

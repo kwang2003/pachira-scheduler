@@ -25,13 +25,6 @@ public class JobDao extends BaseDao {
 	public List<Job> getAll(){
 		SqlQueryCommand command = new SqlQueryCommand();
 		return this.findListBySqlCommand(command);
-//		List<Job> jobs = Lists.newArrayList();
-//		Job job = new Job();
-//		job.setCron("0 0 0 * * * ");
-//		job.setId(1L);
-//		job.setName("Hello Job");
-//		job.setDescription("测试Job");
-//		return jobs;
 	}
 	
 	/**

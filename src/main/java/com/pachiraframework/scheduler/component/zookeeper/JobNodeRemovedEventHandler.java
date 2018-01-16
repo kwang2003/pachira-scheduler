@@ -7,10 +7,13 @@ import org.springframework.stereotype.Component;
 
 import com.pachiraframework.scheduler.component.JobScheduler;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * @author wangxuzheng
  *
  */
+@Slf4j
 @Component
 public class JobNodeRemovedEventHandler extends AbstractZookeeperEventHandler {
 	private static final String JOB_NODE_REG = "^"+ZookeeperJobConstants.JOB_PATH+ZookeeperJobConstants.PATH_SPLITOR+"\\d{1,}";
@@ -31,6 +34,7 @@ public class JobNodeRemovedEventHandler extends AbstractZookeeperEventHandler {
 		String path = event.getData().getPath();
 		String jobId = path.substring(ZookeeperJobConstants.JOB_PATH.length() + 1);
 		Long id = Long.valueOf(jobId);
+		log.info("job [{}] 节点被移除",jobId);
 		jobScheduler.removeJob(id);
 	}
 

@@ -11,7 +11,6 @@ import com.pachiraframework.entity.BaseEntity.IsDeletedEnum;
 import com.pachiraframework.scheduler.component.zookeeper.ZookeeperJobManager;
 import com.pachiraframework.scheduler.dao.JobDao;
 import com.pachiraframework.scheduler.dto.AddJob;
-import com.pachiraframework.scheduler.dto.EditJob;
 import com.pachiraframework.scheduler.dto.SearchJobCriteria;
 import com.pachiraframework.scheduler.entity.Job;
 import com.pachiraframework.scheduler.service.JobService;
@@ -56,11 +55,6 @@ public class JobServiceImpl implements JobService {
 		log.info("Added new Job ,id={},name={},cron={}",job.getId(),job.getName(),job.getCron());
 		zookeeperJobManager.add(job);
 		return ExecuteResult.newSuccessResult(job);
-	}
-
-	@Override
-	public ExecuteResult<Job> edit(EditJob job) {
-		return null;
 	}
 
 	@Override

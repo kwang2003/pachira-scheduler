@@ -3,7 +3,6 @@ package com.pachiraframework.scheduler.service;
 import com.pachiraframework.common.ExecuteResult;
 import com.pachiraframework.domain.Page;
 import com.pachiraframework.scheduler.dto.AddJob;
-import com.pachiraframework.scheduler.dto.EditJob;
 import com.pachiraframework.scheduler.dto.SearchJobCriteria;
 import com.pachiraframework.scheduler.entity.Job;
 
@@ -24,12 +23,6 @@ public interface JobService {
 	 * @return
 	 */
 	public ExecuteResult<Job> add(AddJob job);
-	/**
-	 * 编辑任务信息
-	 * @param job
-	 * @return
-	 */
-	public ExecuteResult<Job> edit(EditJob job);
 	/**
 	 * 删除一个任务
 	 * @param jobId
