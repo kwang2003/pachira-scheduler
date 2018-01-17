@@ -35,11 +35,12 @@ public class JobHistoryDao extends BaseDao {
 	 * @param message
 	 * @return
 	 */
-	public int markFaild(Long id,String message) {
+	public int markFaild(Long id,Date endedAt,String message) {
 		SqlUpdateCommand command = new SqlUpdateCommand();
 		command.addWhereSqlCondition(SqlCondition.and("id", "=", id));
 		command.addSqlColumnValue(new SqlColumnValue("status", StatusEnum.FAIL.toString()));
 		command.addSqlColumnValue(new SqlColumnValue("message", message));
+		command.addSqlColumnValue(new SqlColumnValue("ended_at", endedAt));
 		return this.updateBySqlCommand(command);
 	}
 }

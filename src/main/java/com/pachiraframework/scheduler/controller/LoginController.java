@@ -2,9 +2,8 @@ package com.pachiraframework.scheduler.controller;
 
 import java.util.Date;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,10 +22,10 @@ import lombok.Data;
 @RestController
 @RequestMapping("/user/")
 public class LoginController {
-	@RequestMapping(path = "/login", method = { RequestMethod.GET })
-	public ResponseEntity<ExecuteResult<UserEntry>> search(HttpServletRequest request) {
-		String name = request.getParameter("name");
-		String password = request.getParameter("password");
+	@RequestMapping(path = "/login", method = { RequestMethod.POST })
+	public ResponseEntity<ExecuteResult<UserEntry>> search(@RequestBody LoginBean login) {
+		String name = login.getName();
+		String password = login.getPassword();
 		if("admin".equals(name) && "111111".equals(password)) {
 			UserEntry user = new UserEntry();
 			user.setId(1L);
@@ -42,6 +41,12 @@ public class LoginController {
 	public static class UserEntry{
 		private Long id;
 		private String token;
+	}
+	
+	@Data
+	public static class LoginBean{
+		private String name;
+		private String password;
 	}
 	
 	private String generateToken(Long userId) {

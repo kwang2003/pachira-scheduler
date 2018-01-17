@@ -13,8 +13,6 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 import com.pachiraframework.scheduler.entity.Job;
 
-import lombok.SneakyThrows;
-
 /**
  * 执行http借口
  * @author kevin
@@ -24,8 +22,7 @@ import lombok.SneakyThrows;
 public class HttpJobRunner extends AbstractJobRunner {
 	private static final String POST = "POST";
 	@Override
-	@SneakyThrows
-	public void runInternel(Job job) {
+	public void runInternel(Job job) throws Exception{
 		HttpRequest httpRequest = null;
 		String method = job.getMethod();
 		if(POST.equalsIgnoreCase(method)) {

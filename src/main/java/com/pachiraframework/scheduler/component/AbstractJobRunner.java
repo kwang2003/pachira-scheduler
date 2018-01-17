@@ -45,7 +45,7 @@ public abstract class AbstractJobRunner {
 	 * 实际要执行的任务逻辑
 	 * @param job
 	 */
-	protected abstract void runInternel(Job job);
+	protected abstract void runInternel(Job job) throws Exception;
 	protected JobHistory beforeRun(Job job) {
 		JobHistory history = new JobHistory();
 		history.setJobId(job.getId());
@@ -65,7 +65,7 @@ public abstract class AbstractJobRunner {
 	}
 	
 	protected void afterThrows(Job job,JobHistory history,Exception e) {
-		jobHistoryDao.markFaild(history.getId(), e.getMessage());
+		jobHistoryDao.markFaild(history.getId(),new Date(), e.getMessage());
 		log.info("after throws run job {},message:\n",job.getId(),Throwables.getStackTraceAsString(e));
 	}
 	/**
