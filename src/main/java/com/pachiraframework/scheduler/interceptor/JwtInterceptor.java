@@ -1,18 +1,16 @@
-package com.pachiraframework.scheduler.filter;
+package com.pachiraframework.scheduler.interceptor;
 
 import java.io.IOException;
 import java.util.Map;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.curator.shaded.com.google.common.collect.Maps;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.filter.GenericFilterBean;
+import org.springframework.stereotype.Component;
+import org.springframework.web.cors.CorsUtils;
+import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -26,18 +24,20 @@ import io.jsonwebtoken.SignatureException;
  * @author wangxuzheng
  *
  */
-public class JWTFilter extends GenericFilterBean {
+@Component
+public class JwtInterceptor extends HandlerInterceptorAdapter{
 	private static final String AUTH_HEADER_KEY = "Authorization";
 	private static final String TOKEN_PREFIX = "Bearer ";
 	@Override
-	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-			throws IOException, ServletException {
-		HttpServletRequest req = (HttpServletRequest) request;
-		HttpServletResponse resp = (HttpServletResponse) response;
-		String authHeader = req.getHeader(AUTH_HEADER_KEY);
+	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+			throws Exception {
+		if (CorsUtils.isPreFlightRequest(request)) {
+			return true;
+		}
+		String authHeader = request.getHeader(AUTH_HEADER_KEY);
 		if (authHeader == null || !authHeader.startsWith(TOKEN_PREFIX)) {
-			 write(resp, "非法的请求，请求头中没有包含["+AUTH_HEADER_KEY+"]或者["+AUTH_HEADER_KEY+"]的值没有以["+TOKEN_PREFIX+"]开头");
-			 return;
+			 write(response, "非法的请求，请求头中没有包含["+AUTH_HEADER_KEY+"]或者["+AUTH_HEADER_KEY+"]的值没有以["+TOKEN_PREFIX+"]开头");
+			 return false;
 		}
 		// The part after "Bearer "
 		final String token = authHeader.substring(TOKEN_PREFIX.length()); 
@@ -47,11 +47,10 @@ public class JWTFilter extends GenericFilterBean {
             request.setAttribute("claims", claims);
         }
         catch (final SignatureException e) {
-            write(resp, "非法的token参数");
-            return;
+            write(response, "非法的token参数");
+            return false;
         }
-
-		chain.doFilter(req, response);
+		return true;
 	}
 
 	private void write(HttpServletResponse response,String error) throws IOException {
