@@ -25,12 +25,17 @@
 		</if>
 	</sql> 	<!-- 分页查询模版普通信息 -->
 	<sql id="findByPageCriteria">
-		<if test="params.address!=null and params.address !=''">
-			and `name` like CONCAT('%',#{params.name},'%' ) 		
+		<if test="pageRequest.jobId!=null and pageRequest.jobId !=0">
+			and `job_id` =#{pageRequest.jobId}	
 		</if>
-		<if test="params.status!=null and params.status !=''"> 			
+		<if test="pageRequest.startDate!=null and pageRequest.startDate !=''"> 			
 			<![CDATA[ 			
-				and status = (#{params.status}) 			
+				and created_at >= (#{pageRequest.startDate}) 			
+			]]>
+		</if>
+		<if test="pageRequest.endDate!=null and pageRequest.endDate !=''"> 			
+			<![CDATA[ 			
+				and created_at <= (#{pageRequest.endDate}) 			
 			]]>
 		</if>
 	</sql>
