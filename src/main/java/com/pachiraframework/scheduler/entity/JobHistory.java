@@ -35,6 +35,7 @@ public class JobHistory extends BaseEntity<Long> {
 	 */
 	private String message;
 	private String status;
+	private String instance;
 	
 	@AllArgsConstructor
 	public static enum StatusEnum{

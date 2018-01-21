@@ -10,6 +10,8 @@ import org.apache.zookeeper.data.Stat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.alibaba.dubbo.common.utils.NetUtils;
+
 import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +28,7 @@ public class ZookeeperJobElector{
 	 * job运行实例ID
 	 */
 	@Getter
-	private String instance = UUID.randomUUID().toString();
+	private String instance = NetUtils.getLocalHost()+"|"+UUID.randomUUID().toString();
 	@Autowired
 	private CuratorFramework curatorFramework;
 	public void electLeader(Long jobId) throws Exception {

@@ -22,7 +22,7 @@ public class JobHistoryServiceImpl implements JobHistoryService {
 	private JobHistoryDao jobHistoryDao;
 	@Override
 	public Page<JobHistory> search(SearchJobHistoryCriteria criteria) {
-		criteria.getOrders().add(new Order("created_at", Direction.DESC));
+		criteria.getOrders().add(new Order("started_at", Direction.DESC));
 		WrappedPageRequest pageRequest = new WrappedPageRequest(criteria);
 		return jobHistoryDao.findByPage(pageRequest);
 	}

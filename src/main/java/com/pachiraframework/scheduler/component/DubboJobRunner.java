@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.alibaba.dubbo.config.ApplicationConfig;
 import com.alibaba.dubbo.config.ReferenceConfig;
 import com.alibaba.dubbo.config.RegistryConfig;
 import com.alibaba.dubbo.rpc.service.GenericService;
@@ -21,9 +22,11 @@ import com.pachiraframework.scheduler.entity.Job;
 public class DubboJobRunner extends AbstractJobRunner {
 	@Autowired
 	private ServiceRegistryFactory serviceRegistryFactory;
+	private ApplicationConfig application = new ApplicationConfig("scheduler");
 	@Override
 	public void runInternel(Job job) {
 		ReferenceConfig<GenericService> reference = new ReferenceConfig<GenericService>(); 
+		reference.setApplication(application);
 		Map<String, Object> map = job.getPropertiesMap();
 		// 弱类型接口名
 		reference.setInterface(job.getInterfaceName());  

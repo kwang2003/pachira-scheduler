@@ -53,6 +53,7 @@ public abstract class AbstractJobRunner {
 		history.setCron(job.getCron());
 		history.setStartedAt(new Date());
 		history.setStatus(StatusEnum.ING.toString());
+		history.setInstance(this.zookeeperJobElector.getInstance());
 		jobHistoryDao.insert(history);
 		log.info("fefore run job {},history id {}",job.getId(),history.getId());
 		return history;
@@ -65,7 +66,9 @@ public abstract class AbstractJobRunner {
 	}
 	
 	protected void afterThrows(Job job,JobHistory history,Exception e) {
-		jobHistoryDao.markFaild(history.getId(),new Date(), e.getMessage());
+		String message = e.getMessage();
+		message = message.length()>200?message.substring(0, 200):message;
+		jobHistoryDao.markFaild(history.getId(),new Date(), message);
 		log.info("after throws run job {},message:\n",job.getId(),Throwables.getStackTraceAsString(e));
 	}
 	/**
