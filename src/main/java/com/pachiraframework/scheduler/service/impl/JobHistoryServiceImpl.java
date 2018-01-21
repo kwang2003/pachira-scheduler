@@ -3,6 +3,8 @@ package com.pachiraframework.scheduler.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.pachiraframework.domain.Order;
+import com.pachiraframework.domain.Order.Direction;
 import com.pachiraframework.domain.Page;
 import com.pachiraframework.domain.WrappedPageRequest;
 import com.pachiraframework.scheduler.dao.JobHistoryDao;
@@ -20,6 +22,7 @@ public class JobHistoryServiceImpl implements JobHistoryService {
 	private JobHistoryDao jobHistoryDao;
 	@Override
 	public Page<JobHistory> search(SearchJobHistoryCriteria criteria) {
+		criteria.getOrders().add(new Order("created_at", Direction.DESC));
 		WrappedPageRequest pageRequest = new WrappedPageRequest(criteria);
 		return jobHistoryDao.findByPage(pageRequest);
 	}
