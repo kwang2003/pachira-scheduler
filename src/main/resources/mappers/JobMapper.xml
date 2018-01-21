@@ -27,12 +27,12 @@
 		</if>
 	</sql> 	<!-- 分页查询模版普通信息 -->
 	<sql id="findByPageCriteria">
-		<if test="params.address!=null and params.address !=''">
-			and `name` like CONCAT('%',#{params.name},'%' ) 		
+		<if test="pageRequest.name!=null and pageRequest.name !=''">
+			and `name` like CONCAT('%',#{pageRequest.name},'%' ) 		
 		</if>
-		<if test="params.status!=null and params.status !=''"> 			
+		<if test="pageRequest.status!=null and pageRequest.status !=''"> 			
 			<![CDATA[ 			
-				and status = (#{params.status}) 			
+				and status = (#{pageRequest.status}) 			
 			]]>
 		</if>
 	</sql>

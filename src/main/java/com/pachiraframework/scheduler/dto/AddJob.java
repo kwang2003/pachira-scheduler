@@ -1,7 +1,5 @@
 package com.pachiraframework.scheduler.dto;
 
-import com.pachiraframework.scheduler.entity.Job.TypeEnum;
-
 import lombok.Data;
 
 /**
@@ -16,7 +14,7 @@ public class AddJob {
 	/**
 	 * 任务类型
 	 */
-	private TypeEnum type;
+	private String type;
 	/**
 	 * 注册中心地址
 	 */

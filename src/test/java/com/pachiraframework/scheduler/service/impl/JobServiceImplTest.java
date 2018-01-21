@@ -29,7 +29,7 @@ public class JobServiceImplTest extends AbstractSchedulerApplicationTest{
 		AddJob job = new AddJob();
 		job.setCron("0/5 * * * * ?");
 		job.setName("測試以下");
-		job.setType(TypeEnum.HTTP);
+		job.setType(TypeEnum.HTTP.toString());
 		job.setDescription("5秒钟执行一次");
 		job.setMethod("GET");
 		job.setInterfaceName("http://www.baidu.com");

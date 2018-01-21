@@ -49,8 +49,9 @@ public class JobServiceImpl implements JobService {
 		job.setInterfaceName(addJob.getInterfaceName());
 		job.setMethod(addJob.getMethod());
 		job.setTimeout(addJob.getTimeout());
-		job.setType(addJob.getType().toString());
+		job.setType(addJob.getType());
 		job.setIsDeleted(IsDeletedEnum.NOT_DELTED.getIsDeleted());
+		job.setRegistry(addJob.getRegistry());
 		jobDao.insert(job);
 		log.info("Added new Job ,id={},name={},cron={}",job.getId(),job.getName(),job.getCron());
 		zookeeperJobManager.add(job);
